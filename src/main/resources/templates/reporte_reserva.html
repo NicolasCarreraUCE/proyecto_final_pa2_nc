@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- CSS only -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<title>Budget</title>
+</head>
+
+<body>
+	<div>
+		<header class="p-3 bg-dark text-white">
+			<div class="container">
+				<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+					<a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+						<svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+							<use xlink:href="#bootstrap" />
+						</svg>
+					</a>
+
+					<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+						<li><a href="/" class="nav-link px-2 text-secondary">Inicio</a></li>
+						<li class="dropdown"><a href="#" class="nav-link px-2 text-white btn dropdown-toggle"
+								role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+								aria-expanded="false">Clientes</a>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<li><a class="dropdown-item" href="/cliente/consulta/vehiculo">Buscar vehículos
+										disponibles</a></li>
+								<li><a class="dropdown-item" href="/cliente/consulta/reservar">Reservar vehículo</a>
+								</li>
+								<li><a class="dropdown-item" href="/cliente/registrar">Registrarse como cliente</a></li>
+							</ul>
+						</li>
+						<li class="dropdown"><a href="#" class="nav-link px-2 text-white btn dropdown-toggle"
+								role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+								aria-expanded="false">Empleados</a>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<li><a class="dropdown-item" href="/empleado/cliente/registrar">Registrar cliente</a>
+								</li>
+								<li><a class="dropdown-item" href="/empleado/cliente/buscar">Buscar cliente</a></li>
+								<li><a class="dropdown-item" href="/empleado/vehiculo/registrar">Ingresar un
+										vehículo</a></li>
+								<li><a class="dropdown-item" href="/empleado/vehiculo/buscar">Buscar vehículo</a></li>
+								<li><a class="dropdown-item" href="/empleado/vehiculo/retirar">Retirar un vehículo sin
+										reserva</a></li>
+							</ul>
+						</li>
+						<li class="dropdown"><a href="#" class="nav-link px-2 text-white btn dropdown-toggle"
+								role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+								aria-expanded="false">Reportes</a>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								<li><a class="dropdown-item" href="/reportes/reporte/reserva">Reservas de Reservas</a>
+								</li>
+								<li><a class="dropdown-item" href="/reportes/reporte/cliente">Reporte de Clientes
+										VIP</a></li>
+								<li><a class="dropdown-item" href="/reportes/reporte/vehiculo">Reporte de Vehículos
+										VIP</a></li>
+							</ul>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+		</header>
+	</div>
+
+	<!-- JavaScript Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
+
+	<div class="container">
+
+		<br>
+		<h1>Reservas de Reservas</h1>
+		<br>
+		<form th:object="${reporte}" th:action="@{/reportes/reporte/reserva/resultado}" method="post">
+			<!--div class="form-group">
+				<label for="fecha">Fecha</label>
+				<input id="fecha" type="text" class="form-control" th:name="mensaje">
+			</!div-->
+
+			<label for="fecha-inicio">Desde: </label>
+			<input type="datetime-local" name="fecha-inicio" id="fecha-inicio" th:name="fecha-inicio">
+			<label for="fecha-fin">Hasta: </label>
+			<input type="datetime-local" name="fecha-fin" id="fecha-fin" th:name="fecha-fin">
+			<br><br>
+			<button class="btn btn-warning" type="submit">Buscar</button>
+		</form>
+			<br>
+			<h2 th:if="${list == null} OR ${list.isEmpty()}">No hay resultados...<h2>
+	</div>
+
+	<div th:if=" ${list != null} AND ${!list.isEmpty()}">
+
+		<h1>Reporte Reservas</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Numero reserva</th>
+					<th>Desde</th>
+					<th>Hasta</th>
+					<th>Total</th>
+					<th>Codro</th>
+					<th>Cedula</th>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Placa</th>
+					<th>Modelo</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="reserva : ${list}">
+					<td th:text="${reserva.numeroReserva}"></td>
+					<td th:text="${reserva.fechaInicioReserva}"></td>
+					<td th:text="${reserva.fechaFinReserva}"></td>
+					<td th:text="${reserva.valorTotalAPagarReserva}"></td>
+					<td th:text="${reserva.fechaCobroReserva}"></td>
+					<td th:text="${reserva.cedulaCliente}"></td>
+					<td th:text="${reserva.nombreCliente}"></td>
+					<td th:text="${reserva.apellidoCliente}"></td>
+					<td th:text="${reserva.placaVehiculo}"></td>
+					<td th:text="${reserva.modeloVehiculo}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+
+</html>
